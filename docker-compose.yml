@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: your-app-name
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./resources:/app/resources
+      - tmp-data:/tmp
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    restart: unless-stopped
+
+volumes:
+  tmp-data: 
