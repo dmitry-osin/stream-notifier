@@ -1,0 +1,25 @@
+plugins {
+    kotlin("jvm") version "2.0.21"
+}
+
+group = "pro.osin.tools"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(kotlin("test"))
+    implementation("org.telegram:telegrambots:6.8.0")
+    implementation("com.github.twitch4j:twitch4j:1.18.0")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.15.+")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+}
+
+tasks.test {
+    useJUnitPlatform()
+}
+kotlin {
+    jvmToolchain(21)
+}
