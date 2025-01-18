@@ -1,30 +1,41 @@
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.module.kotlin.KotlinFeature
-import com.fasterxml.jackson.module.kotlin.KotlinModule
-import java.io.File
-
 data class Config(
     val twitchClientId: String,
     val twitchClientSecret: String,
+    val twitchOAuthToken: String,
     val telegramToken: String,
-    val telegramChatId: Long,
-    val notificationDelayInSeconds: Long,
+    val telegramChatId: String,
+    val retryDelayInSeconds: Long,
     val locale: String,
-    val botName: String
+    val botName: String,
+    val channels: List<String> = emptyList(),
+    val notificationMessage: String
 ) {
     companion object {
-        fun loadConfig(configPath: String = CONFIG_FILE): Config {
-            val mapper = ObjectMapper().registerModule(
-                KotlinModule.Builder()
-                    .withReflectionCacheSize(512)
-                    .configure(KotlinFeature.NullToEmptyCollection, false)
-                    .configure(KotlinFeature.NullToEmptyMap, false)
-                    .configure(KotlinFeature.NullIsSameAsDefault, false)
-                    .configure(KotlinFeature.SingletonSupport, true)
-                    .configure(KotlinFeature.StrictNullChecks, false)
-                    .build()
+        fun loadConfig(): Config {
+
+            val twitchClientId = System.getenv("bot_twitchClientId")
+            val twitchClientSecret = System.getenv("bot_twitchClientSecret")
+            val telegramToken = System.getenv("bot_telegramToken")
+            val telegramChatId = System.getenv("bot_telegramChatId")
+            val retryDelayInSeconds = System.getenv("bot_retryDelayInSeconds").toLong()
+            val locale = System.getenv("bot_locale")
+            val botName = System.getenv("bot_name")
+            val channels = System.getenv("bot_channels").split(",").filter { it.isNotEmpty() }
+            val notificationMessage = System.getenv("bot_notificationMessage")
+            val twitchOAuthToken = System.getenv("bot_twitchOAuthToken")
+
+            return Config(
+                twitchClientId = twitchClientId,
+                twitchClientSecret = twitchClientSecret,
+                twitchOAuthToken = twitchOAuthToken,
+                telegramToken = telegramToken,
+                telegramChatId = telegramChatId,
+                retryDelayInSeconds = retryDelayInSeconds,
+                locale = locale,
+                botName = botName,
+                channels = channels,
+                notificationMessage = notificationMessage
             )
-            return mapper.readValue(File(configPath), Config::class.java)
         }
     }
 } 

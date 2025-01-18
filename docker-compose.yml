@@ -3,14 +3,23 @@ version: '3.8'
 services:
   app:
     build: .
-    container_name: your-app-name
+    container_name: twitch-notifier
     ports:
       - "8080:8080"
     volumes:
-      - ./resources:/app/resources
-      - tmp-data:/tmp
+      - /tmp:/tmp
     environment:
       - JAVA_OPTS=-Xmx512m -Xms256m
+      - bot_twitchClientId=YOUR_TWITCH_CLIENT_ID
+      - bot_twitchClientSecret=YOUR_TWITCH_CLIENT_SECRET
+      - bot_twitchOAuthToken=YOUR_TWITCH_OAUTH_TOKEN
+      - bot_telegramToken=YOUR_TELEGRAM_BOT_TOKEN
+      - bot_telegramChatId=275726483
+      - bot_retryDelayInSeconds=60
+      - bot_locale=en
+      - bot_name=YOUR_TELEGRAM_BOT_NAME
+      - 'bot_channels=aktivehatex:twitch'
+      - 'bot_notificationMessage="Channel %s is online. Game is %s. Title is %s"'
     restart: unless-stopped
 
 volumes:

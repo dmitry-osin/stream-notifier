@@ -1,9 +1,0 @@
-{
-  "twitchClientId": "YOUR_CLIENT_ID",
-  "twitchClientSecret": "YOUR_CLIENT_SECRET",
-  "telegramToken": "YOUR_BOT_TOKEN",
-  "telegramChatId": "YOUR_CHAT_ID",
-  "notificationDelayInSeconds": 60,
-  "locale": "en",
-  "botName": "YOUR_BOT_NAME"
-} 

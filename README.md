@@ -15,40 +15,56 @@ A bot that monitors streaming platforms (currently supports Twitch) and sends no
 
 ## Configuration
 
-### Bot Configuration
+The bot is configured using environment variables:
 
-Create config file named `config.json` in the `resources` directory with the following structure:
+```bash
+# Twitch Configuration
+bot_twitchClientId=YOUR_CLIENT_ID
+bot_twitchClientSecret=YOUR_CLIENT_SECRET
+bot_twitchOAuthToken=YOUR_OAUTH_TOKEN
 
-```json
-{
-  "twitchClientId": "YOUR_CLIENT_ID",
-  "twitchClientSecret": "YOUR_CLIENT_SECRET",
-  "telegramToken": "YOUR_BOT_TOKEN",
-  "telegramChatId": "YOUR_CHAT_ID",
-  "notificationDelayInSeconds": 60,
-  "locale": "en",
-  "botName": "YOUR_BOT_NAME"
-}
+# Telegram Configuration
+bot_telegramToken=YOUR_BOT_TOKEN
+bot_telegramChatId=YOUR_CHAT_ID
+
+# Bot Settings
+bot_retryDelayInSeconds=60
+bot_locale=en
+bot_name=YOUR_BOT_NAME
+bot_channels=channel1:twitch,channel2:twitch
+bot_notificationMessage=Hey! {channel} is now live: {title}
 ```
 
-- `twitchClientId` and `twitchClientSecret`: Obtain from [Twitch Developer Console](https://dev.twitch.tv/console)
-- `telegramToken`: Get from [@BotFather](https://t.me/botfather) on Telegram
-- `telegramChatId`: The chat ID where notifications will be sent
-- `notificationDelayInSeconds`: Interval between checks (in seconds)
-- `locale`: Language for notifications ("en" for English)
-- `botName`: Your bot's display name
+### Environment Variables Description
 
-### Channels Configuration
+- `bot_twitchClientId`, `bot_twitchClientSecret` and `bot_twitchOAuthToken`: Obtain
+  from [Twitch Developer Console](https://dev.twitch.tv/console)
 
-Create a text file named `channels.txt` in the `resources` directory with the list of channels to monitor. 
+  To get these credentials using Twitch CLI:
+    1. Install Twitch CLI from https://dev.twitch.tv/docs/cli/
+    2. Authenticate with Twitch:
+       ```bash
+       twitch configure
+       ```
+    3. Create a new application:
+       ```bash
+       twitch api post client/create -b '{"name":"YourAppName","redirect_uri":"http://localhost"}'
+       ```
+       This will return your `client_id` and `client_secret`
 
-Format:
+    4. Get OAuth token:
+       ```bash
+       twitch token
+       ```
+       This will generate your `OAuth token`
 
-```
-channel1:twitch
-channel2:twitch
-channel3:twitch
-```
+- `bot_telegramToken`: Get from [@BotFather](https://t.me/botfather) on Telegram
+- `bot_telegramChatId`: The chat ID where notifications will be sent
+- `bot_retryDelayInSeconds`: Interval between checks (in seconds)
+- `bot_locale`: Language for notifications ("en" for English)
+- `bot_name`: Your bot's display name
+- `bot_channels`: Comma-separated list of channels to monitor (format: channelname:platform)
+- `bot_notificationMessage`: Template for notification messages. Available variables: {channel}, {title}
 
 Currently supported platforms:
 - `twitch` - Twitch.tv streams
@@ -62,10 +78,21 @@ Currently supported platforms:
 ./gradlew build
 ```
 
+2. Run the container with environment variables:
+
 ```bash
-docker run -v /path/to/your/config:/app/resources stream-notification-bot
+docker run \
+  -e bot_twitchClientId=YOUR_CLIENT_ID \
+  -e bot_twitchClientSecret=YOUR_CLIENT_SECRET \
+  -e bot_telegramToken=YOUR_BOT_TOKEN \
+  -e bot_telegramChatId=YOUR_CHAT_ID \
+  -e bot_retryDelayInSeconds=60 \
+  -e bot_locale=en \
+  -e bot_name=YOUR_BOT_NAME \
+  -e bot_channels=channel1:twitch,channel2:twitch \
+  -e bot_notificationMessage="Hey! {channel} is now live: {title}" \
+  stream-notification-bot
 ```
-Make sure to mount a volume with your configuration files (`config.json` and `channels.txt`) to `/app/resources`.
 
 ## Features
 

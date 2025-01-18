@@ -3,8 +3,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.io.File
-import java.util.*
 
 typealias ChannelWithPlatform = Pair<String, StreamingPlatform>
 
@@ -12,8 +10,6 @@ class Bootstrapper {
     private val config = loadConfig()
     private val notificationDispatcher: NotificationStrategyDispatcher = NotificationStrategyDispatcher(config)
     private val checkerDispatcher: CheckerStrategyDispatcher = CheckerStrategyDispatcher(config)
-    private val locale = Locale(config.locale)
-    private val bundle = ResourceBundle.getBundle(MESSAGES_FILE, locale)
 
     init {
         startBot()
@@ -27,28 +23,28 @@ class Bootstrapper {
         CoroutineScope(Dispatchers.IO).launch {
             while (true) {
 
-                val channels = readChannels()
+                val channels = readChannels(config)
                     .groupBy({ it.second }, { it.first })
 
                 channels.forEach { (platform, channels) ->
                     checkerDispatcher.dispatch(channels, platform).forEach { stream ->
                         notificationDispatcher.dispatch(
                             String.format(
-                                bundle.getString("stream.started"),
-                                stream.title,
+                                config.notificationMessage,
                                 stream.userName,
-                                stream.gameName
+                                stream.gameName,
+                                stream.title
                             )
                         )
                     }
                 }
-                delay(config.notificationDelayInSeconds * 1000)
+                delay(config.retryDelayInSeconds * 1000)
             }
         }
     }
 
-    private fun readChannels(path: String = CHANNELS_FILE): List<ChannelWithPlatform> {
-        return File(path).readLines()
+    private fun readChannels(config: Config): List<ChannelWithPlatform> {
+        return config.channels
             .filter { it.isNotEmpty() }
             .filter { it.contains(DELIMITER) }
             .map {

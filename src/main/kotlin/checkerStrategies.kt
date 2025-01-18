@@ -1,3 +1,4 @@
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential
 import com.github.twitch4j.TwitchClientBuilder
 
 sealed interface ICheckerStrategy {
@@ -15,6 +16,7 @@ enum class StreamingPlatform(val title: String) {
 class TwitchCheckerStrategy(config: Config) : ICheckerStrategy {
 
     private val client = TwitchClientBuilder.builder()
+        .withDefaultAuthToken(OAuth2Credential("twitch", config.twitchOAuthToken))
         .withClientId(config.twitchClientId)
         .withClientSecret(config.twitchClientSecret)
         .withEnableHelix(true)
@@ -32,7 +34,7 @@ class TwitchCheckerStrategy(config: Config) : ICheckerStrategy {
 
 }
 
-class CheckerStrategyDispatcher(config: Config = Config.loadConfig()) {
+class CheckerStrategyDispatcher(config: Config) {
 
     private val twitch = TwitchCheckerStrategy(config)
     private val strategies = setOf(twitch)

@@ -4,9 +4,8 @@ FROM eclipse-temurin:21-jre-jammy
 # Set working directory in container
 WORKDIR /app
 
-# Add volumes for temporary files and external resources
+# Add volume for temporary files
 VOLUME /tmp
-VOLUME /app/resources
 
 # Copy the built JAR file into the container
 COPY build/libs/*.jar app.jar

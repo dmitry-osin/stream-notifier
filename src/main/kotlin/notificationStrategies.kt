@@ -5,7 +5,7 @@ sealed interface INotificationStrategy {
     val isApplicable: Boolean
 }
 
-class TelegramNotificationStrategy(private val config: Config) : INotificationStrategy {
+class TelegramNotificationStrategy(config: Config) : INotificationStrategy {
 
     private val notifier = TelegramNotifierBot(config.telegramToken, config.telegramChatId)
 
@@ -18,7 +18,7 @@ class TelegramNotificationStrategy(private val config: Config) : INotificationSt
 
 }
 
-class NotificationStrategyDispatcher(config: Config = Config.loadConfig()) {
+class NotificationStrategyDispatcher(config: Config) {
 
     private val telegramBot = TelegramNotificationStrategy(config)
     private val strategies = setOf(telegramBot)

@@ -12,7 +12,7 @@ sealed interface INotifier {
 
 class TelegramNotifierBot(
     token: String,
-    private val chatId: Long
+    private val chatId: String
 ) : INotifier, TelegramLongPollingBot(token) {
 
     init {
@@ -22,21 +22,13 @@ class TelegramNotifierBot(
     override fun getBotUsername(): String = "TwitchNotifierBot"
 
     override fun onUpdateReceived(update: Update) {
-        // Обработка команд бота если потребуется
+
     }
 
     override fun sendNotification(message: String) {
         val sendMessage = SendMessage()
-        sendMessage.chatId = chatId.toString()
+        sendMessage.chatId = chatId
         sendMessage.text = message
         execute(sendMessage)
     }
-}
-
-class DiscordNotifierBot(private val config: Config) : INotifier {
-
-    override fun sendNotification(message: String) {
-        throw NotImplementedError();
-    }
-
 }
