@@ -109,3 +109,7 @@ docker run \
 - Discord notifications
 - More detailed stream information
 - Command interface through Telegram bot
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
