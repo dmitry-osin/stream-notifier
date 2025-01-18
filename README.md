@@ -1,5 +1,9 @@
 # Stream Notification Bot
 
+## Build status
+
+[![Docker Build](https://github.com/dmitry-osin/twitch-notifier/actions/workflows/docker-build.yml/badge.svg)](https://github.com/dmitry-osin/twitch-notifier/actions/workflows/docker-build.yml)
+
 A bot that monitors streaming platforms (currently supports Twitch) and sends notifications to Telegram when tracked streamers go live.
 
 ## Requirements
