@@ -8,7 +8,9 @@ data class Config(
     val locale: String,
     val botName: String,
     val channels: List<String> = emptyList(),
-    val notificationMessage: String
+    val notificationMessage: String,
+    val discordToken: String,
+    val discordChannelId: String
 ) {
     companion object {
         fun loadConfig(): Config {
@@ -23,6 +25,8 @@ data class Config(
             val channels = System.getenv("bot_channels").split(",").filter { it.isNotEmpty() }
             val notificationMessage = System.getenv("bot_notificationMessage")
             val twitchOAuthToken = System.getenv("bot_twitchOAuthToken")
+            val discordToken = System.getenv("bot_discordToken")
+            val discordChannelId = System.getenv("bot_discordChannelId")
 
             return Config(
                 twitchClientId = twitchClientId,
@@ -34,7 +38,9 @@ data class Config(
                 locale = locale,
                 botName = botName,
                 channels = channels,
-                notificationMessage = notificationMessage
+                notificationMessage = notificationMessage,
+                discordToken = discordToken,
+                discordChannelId = discordChannelId
             )
         }
     }

@@ -15,6 +15,7 @@ dependencies {
     implementation("org.telegram:telegrambots:6.8.0")
     implementation("com.github.twitch4j:twitch4j:1.23.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("net.dv8tion:JDA:5.0.0-beta.18")
 }
 
 tasks.withType<Jar> {

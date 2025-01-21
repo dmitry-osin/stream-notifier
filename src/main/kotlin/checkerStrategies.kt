@@ -3,7 +3,7 @@ import com.github.twitch4j.TwitchClientBuilder
 
 sealed interface ICheckerStrategy {
 
-    fun check(channels: List<String>): List<StreamObject>
+    fun check(notification: Notification): List<StreamObject>
 
     fun isApplicable(platform: StreamingPlatform): Boolean
 }
@@ -24,8 +24,8 @@ class TwitchCheckerStrategy(config: Config) : ICheckerStrategy {
 
     private val checker = TwitchStreamChecker(client)
 
-    override fun check(channels: List<String>): List<StreamObject> {
-        return checker.checkStreams(channels)
+    override fun check(notification: Notification): List<StreamObject> {
+        return checker.checkStream(notification)
     }
 
     override fun isApplicable(platform: StreamingPlatform): Boolean {
@@ -39,11 +39,11 @@ class CheckerStrategyDispatcher(config: Config) {
     private val twitch = TwitchCheckerStrategy(config)
     private val strategies = setOf(twitch)
 
-    fun dispatch(channels: List<String>, platform: StreamingPlatform): List<StreamObject> {
+    fun dispatch(notification: Notification): List<StreamObject> {
         val result = mutableListOf<StreamObject>()
         for (strategy in strategies) {
-            if (strategy.isApplicable(platform)) {
-                result += strategy.check(channels)
+            if (strategy.isApplicable(notification.streamingPlatform)) {
+                result += strategy.check(notification)
             }
         }
         return result

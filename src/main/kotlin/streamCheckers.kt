@@ -2,7 +2,7 @@ import com.github.twitch4j.TwitchClient
 import com.github.twitch4j.helix.domain.Stream
 
 sealed interface IStreamChecker {
-    fun checkStreams(channels: List<String>): List<StreamObject>
+    fun checkStream(notification: Notification): List<StreamObject>
 }
 
 class TwitchStreamChecker(
@@ -10,28 +10,26 @@ class TwitchStreamChecker(
 ) : IStreamChecker {
     private val activeStreams = mutableSetOf<String>()
 
-    override fun checkStreams(channels: List<String>): List<StreamObject> {
+    override fun checkStream(notification: Notification): List<StreamObject> {
         val result = mutableListOf<Stream>()
 
-        channels.forEach { streamer ->
-            val streamList = twitchClient.helix.getStreams(
-                null, null, null, 1, null, null, null, listOf(streamer)
-            ).execute()
+        val streamList = twitchClient.helix.getStreams(
+            null, null, null, 1, null, null, null, listOf(notification.channel)
+        ).execute()
 
-            streamList.streams.firstOrNull()?.let { streamData ->
-                if (!activeStreams.contains(streamData.userId)) {
-                    activeStreams.add(streamData.userId)
-                    result.add(streamData)
-                }
-            } ?: activeStreams.remove(streamer)
-        }
+        streamList.streams.firstOrNull()?.let { streamData ->
+            if (streamData.userId !in activeStreams) {
+                activeStreams.add(streamData.userId)
+                result.add(streamData)
+            }
+        } ?: activeStreams.remove(notification.channel)
 
         return result.map { StreamObject.convert(it) }
     }
 }
 
 data object VkPlayStreamChecker : IStreamChecker {
-    override fun checkStreams(channels: List<String>): List<StreamObject> {
+    override fun checkStream(notification: Notification): List<StreamObject> {
         throw NotImplementedError();
     }
 }

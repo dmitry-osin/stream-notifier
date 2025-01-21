@@ -1,3 +1,4 @@
+import net.dv8tion.jda.api.JDABuilder
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.TelegramBotsApi
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
@@ -8,6 +9,11 @@ sealed interface INotifier {
 
     fun sendNotification(message: String)
 
+}
+
+enum class NotificationPlatform(val title: String) {
+    TELEGRAM("telegram"),
+    DISCORD("discord");
 }
 
 class TelegramNotifierBot(
@@ -30,5 +36,19 @@ class TelegramNotifierBot(
         sendMessage.chatId = chatId
         sendMessage.text = message
         execute(sendMessage)
+    }
+}
+
+class DiscordNotifierBot(
+    token: String,
+    private val channelId: String
+) : INotifier {
+    private val client = JDABuilder.createDefault(token)
+        .build()
+        .awaitReady()
+
+    override fun sendNotification(message: String) {
+        val channel = client.getTextChannelById(channelId) ?: return
+        channel.sendMessage(message).queue()
     }
 }
