@@ -1,3 +1,12 @@
+/*
+ * Copyright (c) 2024 Dmitry Osin <d@osin.pro>
+ */
+
+/**
+ * Data class representing the configuration for the bot.
+ * 
+ * This class is used to store and represent the configuration settings for the bot.
+ */
 data class Config(
     val twitchClientId: String,
     val twitchClientSecret: String,
@@ -12,7 +21,18 @@ data class Config(
     val discordToken: String,
     val discordChannelId: String
 ) {
+    /**
+     * Companion object providing methods for loading configuration from environment variables.
+     */
     companion object {
+        /**
+         * Loads the configuration from environment variables.
+         * 
+         * This method reads the necessary configuration settings from environment variables
+         * and returns a new instance of [Config].
+         * 
+         * @return A new instance of [Config] with the loaded configuration settings.
+         */
         fun loadConfig(): Config {
 
             val twitchClientId = System.getenv("bot_twitchClientId")

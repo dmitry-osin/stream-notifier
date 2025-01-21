@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2024 Dmitry Osin <d@osin.pro>
+ */
+
 plugins {
     kotlin("jvm") version "2.0.21"
     application

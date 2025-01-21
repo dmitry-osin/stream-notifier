@@ -75,7 +75,7 @@ bot_notificationMessage=Channel %s is online. Game is %s. Title is %s
 - `bot_name`: Your bot's display name
 - `bot_channels`: Comma-separated list of channels to monitor (format: channelname:streamingplatform:
   notificationtplatform)
-- `bot_notificationMessage`: Template for notification messages. Available variables: {channel}, {title}, {game}
+- `bot_notificationMessage`: Template for notification messages.
 
 Currently supported platforms:
 - `twitch` - Twitch.tv streams
@@ -126,6 +126,26 @@ docker run \
 - VK Play platform support
 - More detailed stream information
 - Command interface through Telegram bot
+
+## Credits
+
+This project uses the following open-source libraries:
+
+- [TelegramBots](https://github.com/rubenlagus/TelegramBots) - Java library to create Telegram Bots
+  - Version: 6.8.0
+  - License: MIT
+
+- [Twitch4J](https://github.com/twitch4j/twitch4j) - Java API wrapper for the Twitch API
+  - Version: 1.23.0
+  - License: MIT
+
+- [Kotlin Coroutines](https://github.com/Kotlin/kotlinx.coroutines) - Library support for Kotlin coroutines
+  - Version: 1.7.3
+  - License: Apache 2.0
+
+- [JDA (Java Discord API)](https://github.com/discord-jda/JDA) - Java wrapper for the Discord API
+  - Version: 5.0.0-beta.18
+  - License: Apache 2.0
 
 ## License
 
